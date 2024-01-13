@@ -63,6 +63,43 @@
 
 ![PV操作](.\res\PV操作.png)
 
-![test](.\res\test.png)
+先减1，P操作 S<0；先加1（释放/解锁资源），V操作S<=0（检查是否有进程排队，有则进程进入就绪态）。
 
-![test](https://img-blog.csdnimg.cn/20200522161340272.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQxNzA5Mzcw,size_16,color_FFFFFF,t_70#pic_center)
+##### （3）信号量与PV操作
+
+​	PV操作与互斥模型（多个进程共享一台打印机问题）：
+
+```
+P(S);                  互斥信号量S初始值为1
+使用打印机;
+V(S);
+后续代码;         
+```
+
+​	PV操作与同步模型（单缓冲区生产者、消费者问题）：
+
+```
+生产者：                           消费者：
+	生产一个产品;      S1初值为1     	P(S2);      S2初值为2
+	P(S1);                            从缓冲区取产品;
+	送产品到缓冲区;                     V(S1);
+	V(S2)；                           消费产品;
+```
+
+​	**缓冲区**<临界资源>
+
+```
+生产者：                           消费者：
+	生产一个产品;      S1初值为1     	P(S2);      S2初值为2
+	P(S1);                            P(S);
+	P(S);                             从缓冲区取产品;
+	送产品到缓冲区;                     V(S);
+	V(S);                             V(S1);
+	V(S2)；                           消费产品;
+```
+
+​	空间为M的缓冲区：S1的初值为M
+
+##### （4）前趋图与PV操作
+
+​	![前趋图与PV](.\res\前趋图与PV.png)
